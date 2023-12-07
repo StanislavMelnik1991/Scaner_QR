@@ -1,15 +1,9 @@
 'use client'
-import { useState, useEffect } from 'react';
-import type { ChangeEventHandler } from 'react';
+import { useState } from 'react';
 import styles from './Scanner.module.scss'
-import dynamic from 'next/dynamic';
+import CustomQrReader from './CustomQrReader/CustomQrReader';
 export const Scanner = () => {
   const [data, setData] = useState('No result');
-  
-
-
-  const CustomQrReader = dynamic(() => import('./CustomQrReader/CustomQrReader'), { ssr: false })
-
   
   return (
     <div className={styles.wrapper} style={{ padding: '0' }}>
