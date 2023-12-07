@@ -6,13 +6,17 @@ import dynamic from 'next/dynamic';
 export const Scanner = () => {
   const [data, setData] = useState('No result');
   const [cameras, setCameras] = useState<MediaDeviceInfo[]>([]);
-  const [facingMode, setFacingMode] = useState('environment')
+  const [facingMode, setFacingMode] = useState('rear')
 
   useEffect(() => {
-    navigator.mediaDevices.enumerateDevices().then((devices) => {
-      setCameras(devices);
-      setFacingMode(devices[devices.length - 1].deviceId)
-    });
+    if (navigator.mediaDevices) {
+      navigator.mediaDevices.enumerateDevices().then((devices) => {
+        const videoDevices = devices.filter((device) => device.kind === 'videoinput');
+        setCameras(videoDevices);
+      });
+    } else {
+      setData('camera not found')
+    }
   }, []);
 
 
