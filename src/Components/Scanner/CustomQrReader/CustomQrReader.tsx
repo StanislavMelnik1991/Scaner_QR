@@ -9,7 +9,7 @@ type Props = {
 const CustomQrReader = ({setData, delay = 100}: Props)=>{
   return <QrReader
   scanDelay={delay}
-  constraints={{ }}
+  constraints={{ facingMode: { exact: "environment" } }}
   onResult={(result, error) => {
     if (result) {
       setData(result.getText());
