@@ -7,7 +7,7 @@ type Props = {
   facingMode: ConstrainDOMString
 }
 
-export const CustomQrReader = ({setData, delay = 100, facingMode}: Props)=>{
+const CustomQrReader = ({setData, delay = 100, facingMode}: Props)=>{
   return <QrReader
   scanDelay={delay}
   constraints={{ facingMode }}
@@ -26,3 +26,5 @@ export const CustomQrReader = ({setData, delay = 100, facingMode}: Props)=>{
   videoId='videoFinder'
 />
 }
+
+export default CustomQrReader

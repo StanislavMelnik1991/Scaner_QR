@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import type { ChangeEventHandler } from 'react';
 import styles from './Scanner.module.scss'
-import { CustomQrReader } from './CustomQrReader/CustomQrReader';
+import dynamic from 'next/dynamic';
 export const Scanner = () => {
   const [data, setData] = useState('No result');
   const [cameras, setCameras] = useState<MediaDeviceInfo[]>([]);
@@ -10,11 +10,13 @@ export const Scanner = () => {
 
   useEffect(() => {
     navigator.mediaDevices.enumerateDevices().then((devices) => {
-      const videoDevices = devices.filter((device) => device.kind === 'videoinput');
-      setCameras(videoDevices);
-      setFacingMode(videoDevices[videoDevices.length - 1].deviceId)
+      setCameras(devices);
+      setFacingMode(devices[devices.length - 1].deviceId)
     });
   }, []);
+
+
+  const CustomQrReader = dynamic(() => import('./CustomQrReader/CustomQrReader'))
 
   const handleCameraChange: ChangeEventHandler<HTMLSelectElement> = (event) => {
     setFacingMode(event.target.value);
