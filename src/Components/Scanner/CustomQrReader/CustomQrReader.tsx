@@ -4,12 +4,13 @@ import { VideoFinder } from "./VideoFinder/VideoFinder";
 type Props = {
   setData: (val: string) => void
   delay?: number
+  facingMode: ConstrainDOMString
 }
 
-const CustomQrReader = ({setData, delay = 100}: Props)=>{
+const CustomQrReader = ({setData, delay = 100, facingMode}: Props)=>{
   return <QrReader
   scanDelay={delay}
-  constraints={{ facingMode: { exact: "environment" } }}
+  constraints={{ facingMode }}
   onResult={(result, error) => {
     if (result) {
       setData(result.getText());
