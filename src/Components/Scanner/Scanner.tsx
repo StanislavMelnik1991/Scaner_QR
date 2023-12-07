@@ -13,8 +13,9 @@ export const Scanner = () => {
       navigator.mediaDevices.enumerateDevices().then((devices) => {
         const videoDevices = devices.filter((device) => device.kind === 'videoinput');
         if (devices.length) {
+          const back = videoDevices.find((val)=>val.label && val.label.includes('back'))
           setCameras(videoDevices);
-          setDeviceId(videoDevices[0].deviceId)
+          back && setDeviceId(back.deviceId)
         }
       });
     } else {
