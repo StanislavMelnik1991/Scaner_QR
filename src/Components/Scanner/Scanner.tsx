@@ -6,13 +6,16 @@ import dynamic from 'next/dynamic';
 export const Scanner = () => {
   const [data, setData] = useState('No result');
   const [cameras, setCameras] = useState<MediaDeviceInfo[]>([]);
-  const [facingMode, setFacingMode] = useState('rear')
+  const [deviceId, setDeviceId] = useState('rear')
 
   useEffect(() => {
     if (navigator.mediaDevices) {
       navigator.mediaDevices.enumerateDevices().then((devices) => {
         const videoDevices = devices.filter((device) => device.kind === 'videoinput');
-        setCameras(videoDevices);
+        if (devices.length) {
+          setCameras(videoDevices);
+          setDeviceId(videoDevices[0].deviceId)
+        }
       });
     } else {
       setData('camera not found')
@@ -23,7 +26,7 @@ export const Scanner = () => {
   const CustomQrReader = dynamic(() => import('./CustomQrReader/CustomQrReader'))
 
   const handleCameraChange: ChangeEventHandler<HTMLSelectElement> = (event) => {
-    setFacingMode(event.target.value);
+    setDeviceId(event.target.value);
   };
   return (
     <div className={styles.wrapper} style={{ padding: '0' }}>
@@ -34,7 +37,7 @@ export const Scanner = () => {
           </option>
         ))}
       </select>
-      <CustomQrReader facingMode={facingMode} setData={setData} />
+      <CustomQrReader facingMode={deviceId} deviceId={deviceId} setData={setData} />
       <p>{data}</p>
     </div>
   )
