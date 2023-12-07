@@ -36,6 +36,7 @@ const CustomQrReader = ({ setData, delay = 100, ...constraints }: Props) => {
     ViewFinder={VideoFinder}
     containerStyle={{ width: 'fit-content', height: 'fit-content' }}
     videoContainerStyle={{ width: 'fit-content', height: 'fit-content', padding: '0' }}
+    videoStyle={{display: 'none'}}
     videoId='videoFinder'
   />
 }
