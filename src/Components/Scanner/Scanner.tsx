@@ -37,7 +37,7 @@ export const Scanner = () => {
   };
   return (
     <div className={styles.wrapper} style={{ padding: '0' }}>
-      <select name="select" onChange={handleCameraChange}>
+      <select name="select" onChange={handleCameraChange} value={deviceId}>
         {cameras.map((camera) => (
           <option key={camera.deviceId} value={camera.deviceId}>
             {camera.label || `Camera ${camera.deviceId}`}
