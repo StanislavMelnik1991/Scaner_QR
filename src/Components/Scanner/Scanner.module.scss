@@ -1,0 +1,13 @@
+.wrapper {
+  display: flex;
+  width: fit-content;
+  height: fit-content;
+  position: relative;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.container {
+  width: fit-content;
+  height: fit-content;
+}
