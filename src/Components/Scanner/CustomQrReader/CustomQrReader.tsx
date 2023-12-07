@@ -1,5 +1,4 @@
 import { QrReader } from "react-qr-reader";
-import { VideoFinder } from "./VideoFinder/VideoFinder";
 
 type Props = {
   setData: (val: string) => void
@@ -33,11 +32,10 @@ const CustomQrReader = ({ setData, delay = 100, ...constraints }: Props) => {
         console.info(error);
       }
     }}
-    ViewFinder={VideoFinder}
+
     containerStyle={{ width: 'fit-content', height: 'fit-content' }}
     videoContainerStyle={{ width: 'fit-content', height: 'fit-content', padding: '0' }}
-    videoStyle={{display: 'none'}}
-    videoId='videoFinder'
+    videoStyle={{position: 'relative'}}
   />
 }
 
