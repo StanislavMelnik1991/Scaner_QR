@@ -37,6 +37,7 @@ export const CustomScanner = () => {
       )}
       <video
         ref={videoRef}
+        id={deviceId}
         className={styles.video}
         onError={(error) => {
           const val = error.currentTarget.srcObject

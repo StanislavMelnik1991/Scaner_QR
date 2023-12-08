@@ -22,6 +22,9 @@ export const useVebCamConnection = ({ videoRef }: Props) => {
   const [errors, setErrors] = useState(false)
   const [data, setData] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
+  const [controlsRef, setControlsRef] = useState<IScannerControls | undefined>(
+    undefined
+  )
 
   const onResult: OnResultFunction = useCallback(async (result, err) => {
     if (result) {
@@ -46,7 +49,12 @@ export const useVebCamConnection = ({ videoRef }: Props) => {
                 delayBetweenScanAttempts: DELAY,
                 delayBetweenScanSuccess: 5 * DELAY,
               })
-              codeReader.decodeFromStream(stream, videoRef.current, onResult)
+              codeReader
+                .decodeFromStream(stream, videoRef.current, onResult)
+                .then((controls: IScannerControls) => setControlsRef(controls))
+                .catch((error: Error) => {
+                  console.error(error)
+                })
             }
           })
           .catch((e) => {
@@ -106,6 +114,12 @@ export const useVebCamConnection = ({ videoRef }: Props) => {
     } else {
       setData('camera not found')
     }
+    return () => {
+      if (controlsRef) {
+        controlsRef.stop()
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [changeCamera, setData, videoRef])
 
   return {
