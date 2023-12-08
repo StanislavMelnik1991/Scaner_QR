@@ -22,7 +22,6 @@ export const useVebCamConnection = ({ videoRef }: Props) => {
   const [errors, setErrors] = useState(false)
   const [data, setData] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
-  /* const [videoStream, setVideoStream] = useState(null) */
   const [controlsRef, setControlsRef] = useState<IScannerControls | undefined>(
     undefined
   )
@@ -44,7 +43,7 @@ export const useVebCamConnection = ({ videoRef }: Props) => {
         navigator.mediaDevices
           .getUserMedia({ video: { deviceId: { exact: id } } })
           .then((stream) => {
-            /* video.srcObject = stream */
+            video.srcObject = stream
             const codeReader = new BrowserQRCodeReader(undefined, {
               delayBetweenScanAttempts: DELAY,
               delayBetweenScanSuccess: 5 * DELAY,
