@@ -19,7 +19,7 @@ export const CustomScanner = () => {
         [styles.error]: success,
       }
     )}>
-      {cameras && cameras.length && cameras.length > 1 && (
+      {cameras && !!cameras.length && cameras.length > 1 && (
         <select name="select" onChange={onCameraChange} value={deviceId}>
           {cameras.map((camera) => (
             <option key={camera.deviceId} value={camera.deviceId}>
@@ -39,6 +39,7 @@ export const CustomScanner = () => {
           console.error(e)
           setErrors(true)
         }}
+        key={`deviceId-${deviceId}`}
       />
       {!!data && <p>{data}</p>}
     </div>
