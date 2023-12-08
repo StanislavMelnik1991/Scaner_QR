@@ -15,7 +15,6 @@
     bottom: 0;
     width: 100vw;
     height: 100vh;
-    background-color: green;
     z-index: -1;
     opacity: 0;
     transition: all 1000ms ease;
@@ -25,8 +24,16 @@
 .success {
   &::before {
     opacity: 1;
+    background-color: rgb(74, 148, 74);
   }
 }
+.error {
+  &::before {
+    opacity: 1;
+    background-color: red;
+  }
+}
+
 
 .video {
   width: 90vw;
