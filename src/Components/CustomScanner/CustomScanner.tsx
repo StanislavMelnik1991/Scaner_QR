@@ -46,6 +46,7 @@ export const CustomScanner = () => {
           setErrors(true)
           setErrorMessage(`error${String(!!val)}`)
         }}
+        key={`deviceId-${deviceId}`}
       />
       {!!data && <p>{data}</p>}
       <br />
