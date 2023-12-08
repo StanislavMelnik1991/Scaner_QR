@@ -27,6 +27,7 @@ export const useVebCamConnection = ({ videoRef }: Props) => {
         .getUserMedia({ video: { deviceId: { exact: id } } })
         .then((stream) => {
           video.srcObject = stream
+          video.play()
         })
         .catch((e) => {
           console.error(e)
