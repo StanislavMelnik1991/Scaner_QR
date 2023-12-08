@@ -1,4 +1,4 @@
-import { ChangeEventHandler, RefObject, useEffect, useState } from "react"
+import { ChangeEventHandler, RefObject, useEffect, useState, useCallback } from "react"
 import { isMediaDevicesSupported } from "./utils"
 import { useScanner } from "./scanner"
 
@@ -14,42 +14,17 @@ export const useVebCamConnection = ({ videoRef }: Props) => {
 
   const { data, setData, success } = useScanner({ delay: DELAY, videoRef })
 
-  const handleCameraChange: ChangeEventHandler<HTMLSelectElement> = (event) => {
-    setDeviceId(event.target.value);
-  };
-
-  useEffect(() => {
-    if (isMediaDevicesSupported()) {
-      navigator.mediaDevices.enumerateDevices().then((devices) => {
-        const videoDevices = devices.filter((device) => device.kind === 'videoinput');
-        if (devices.length) {
-          const back = videoDevices.find((val) => val.label && val.label.includes('back'))
-          setCameras(videoDevices);
-          back && setDeviceId(back.deviceId)
-        }
-      }).catch((e) => console.log(e))
-    } else {
-      setData('camera not found')
-    }
-  }, [setData]);
-
-  useEffect(() => {
-    if (!deviceId && cameras.length) {
-      setDeviceId(cameras[0].deviceId)
-    }
-  }, [cameras, deviceId])
-
-  useEffect(() => {
+  const changeCamera = useCallback((id: string) => {
     const video = videoRef.current;
-
-    if (deviceId && video && isMediaDevicesSupported()) {
+    if (id && video && isMediaDevicesSupported()) {
+      setDeviceId(id)
       navigator.mediaDevices.getUserMedia().then((stream) => {
         const tracks = stream.getTracks()
         if (tracks && tracks.length) {
           tracks.forEach(track => track.stop())
         }
       }).catch((e) => console.error(e))
-      navigator.mediaDevices.getUserMedia({ video: { deviceId: { exact: deviceId } } })
+      navigator.mediaDevices.getUserMedia({ video: { deviceId: { exact: id } } })
         .then((stream) => {
 
           video.srcObject = stream;
@@ -59,7 +34,34 @@ export const useVebCamConnection = ({ videoRef }: Props) => {
           console.log("An error occurred: " + err);
         });
     }
-  }, [deviceId, videoRef])
+  }, [videoRef])
+
+  const handleCameraChange: ChangeEventHandler<HTMLSelectElement> = (event) => {
+    changeCamera(event.target.value);
+  };
+
+
+
+  useEffect(() => {
+    if (isMediaDevicesSupported()) {
+      navigator.mediaDevices.enumerateDevices().then((devices) => {
+        const videoDevices = devices.filter((device) => device.kind === 'videoinput');
+        if (devices.length) {
+          const back = videoDevices.find((val) => val.label && val.label.includes('back'))
+          if (videoDevices) {
+            setCameras(videoDevices);
+            if (back) {
+              changeCamera(back.deviceId)
+            } else {
+              changeCamera(videoDevices[0].deviceId)
+            }
+          }
+        }
+      }).catch((e) => console.log(e))
+    } else {
+      setData('camera not found')
+    }
+  }, [changeCamera, setData]);
 
   return {
     onCameraChange: handleCameraChange,

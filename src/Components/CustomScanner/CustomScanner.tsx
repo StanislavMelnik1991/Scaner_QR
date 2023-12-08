@@ -28,11 +28,19 @@ export const CustomScanner = () => {
           ))}
         </select>
       )}
-      <video ref={videoRef} className={styles.video} onError={(e) => {
-        console.error(e)
-        setErrors(true)
-        }} />
-      {data && <p>{data}</p>}
+      <video
+        ref={videoRef}
+        className={styles.video}
+        onAbort={(e) => {
+          console.error(e)
+          setErrors(true)
+        }}
+        onError={(e) => {
+          console.error(e)
+          setErrors(true)
+        }}
+      />
+      {!!data && <p>{data}</p>}
     </div>
   )
 }
