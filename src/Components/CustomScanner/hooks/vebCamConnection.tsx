@@ -22,6 +22,7 @@ export const useVebCamConnection = ({ videoRef }: Props) => {
   const [errors, setErrors] = useState(false)
   const [data, setData] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
+  /* const [videoStream, setVideoStream] = useState(null) */
   const [controlsRef, setControlsRef] = useState<IScannerControls | undefined>(
     undefined
   )
@@ -43,26 +44,24 @@ export const useVebCamConnection = ({ videoRef }: Props) => {
         navigator.mediaDevices
           .getUserMedia({ video: { deviceId: { exact: id } } })
           .then((stream) => {
-            video.srcObject = stream
-            if (videoRef.current) {
-              const codeReader = new BrowserQRCodeReader(undefined, {
-                delayBetweenScanAttempts: DELAY,
-                delayBetweenScanSuccess: 5 * DELAY,
+            /* video.srcObject = stream */
+            const codeReader = new BrowserQRCodeReader(undefined, {
+              delayBetweenScanAttempts: DELAY,
+              delayBetweenScanSuccess: 5 * DELAY,
+            })
+            codeReader
+              .decodeFromStream(stream, video, onResult)
+              .then((controls: IScannerControls) => setControlsRef(controls))
+              .catch((error: Error) => {
+                console.error(error)
               })
-              codeReader
-                .decodeFromStream(stream, videoRef.current, onResult)
-                .then((controls: IScannerControls) => setControlsRef(controls))
-                .catch((error: Error) => {
-                  console.error(error)
-                })
-            }
           })
           .catch((e) => {
             console.error(e)
           })
       }
     },
-    [onResult, videoRef]
+    [onResult]
   )
 
   const changeCamera = useCallback(
