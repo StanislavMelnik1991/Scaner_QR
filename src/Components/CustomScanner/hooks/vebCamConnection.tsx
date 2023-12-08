@@ -38,25 +38,19 @@ export const useVebCamConnection = ({ videoRef }: Props) => {
     (id: string) => {
       const video = videoRef.current
       if (id && video && isMediaDevicesSupported()) {
-        setDeviceId((oldId) => {
-          if (oldId) {
-            navigator.mediaDevices
-              .getUserMedia({ video: { deviceId: oldId } })
-              .then((stream) => {
-                const tracks = stream.getTracks()
-                if (tracks && tracks.length) {
-                  tracks.forEach((track) => track.stop())
-                }
-              })
-              .catch((e) => {
-                console.error(e)
-              })
-              .then(() => setCamera(id, video))
-          } else {
-            setCamera(id, video)
-          }
-          return id
-        })
+        setDeviceId(id)
+        navigator.mediaDevices
+          .getUserMedia({ video: true })
+          .then((stream) => {
+            const tracks = stream.getTracks()
+            if (tracks && tracks.length) {
+              tracks.forEach((track) => track.stop())
+            }
+          })
+          .catch((e) => {
+            console.error(e)
+          })
+          .then(() => setCamera(id, video))
       }
     },
     [setCamera, videoRef]
