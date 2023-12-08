@@ -23,16 +23,16 @@ export const useVebCamConnection = ({ videoRef }: Props) => {
         if (tracks && tracks.length) {
           tracks.forEach(track => track.stop())
         }
-      }).catch((e) => console.error(e))
-      navigator.mediaDevices.getUserMedia({ video: { deviceId: { exact: id } } })
-        .then((stream) => {
-
-          video.srcObject = stream;
-          video.play();
-        })
-        .catch((err) => {
-          console.log("An error occurred: " + err);
-        });
+      }).catch((e) => console.error(e)).then(() => {
+        navigator.mediaDevices.getUserMedia({ video: { deviceId: { exact: id } } })
+          .then((stream) => {
+            video.srcObject = stream;
+            video.play();
+          })
+          .catch((err) => {
+            console.log("An error occurred: " + err);
+          });
+      })
     }
   }, [videoRef])
 
@@ -47,11 +47,11 @@ export const useVebCamConnection = ({ videoRef }: Props) => {
       navigator.mediaDevices.enumerateDevices().then((devices) => {
         const videoDevices = devices.filter((device) => device.kind === 'videoinput');
         if (devices.length) {
-          const back = videoDevices.find((val) => val.label && val.label.includes('back'))
+          const mainCamera = videoDevices.find((val) => val.label && val.label.includes('back'))
           if (videoDevices) {
             setCameras(videoDevices);
-            if (back) {
-              changeCamera(back.deviceId)
+            if (mainCamera) {
+              changeCamera(mainCamera.deviceId)
             } else {
               changeCamera(videoDevices[0].deviceId)
             }

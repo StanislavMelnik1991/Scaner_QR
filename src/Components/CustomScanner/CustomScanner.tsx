@@ -39,7 +39,6 @@ export const CustomScanner = () => {
           console.error(e)
           setErrors(true)
         }}
-        key={`deviceId-${deviceId}`}
       />
       {!!data && <p>{data}</p>}
     </div>
