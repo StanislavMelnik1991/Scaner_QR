@@ -30,8 +30,6 @@ export const useVebCamConnection = ({ videoRef }: Props) => {
           video.play()
         })
         .catch((e) => {
-          setErrors(true)
-          setErrorMessage(e)
           console.error(e)
         })
     }
@@ -42,8 +40,7 @@ export const useVebCamConnection = ({ videoRef }: Props) => {
       const video = videoRef.current
       if (id && video && isMediaDevicesSupported()) {
         setDeviceId(id)
-        setCamera(id, video)
-        /* navigator.mediaDevices
+        navigator.mediaDevices
           .getUserMedia({ video: true })
           .then((stream) => {
             const tracks = stream.getTracks()
@@ -52,11 +49,9 @@ export const useVebCamConnection = ({ videoRef }: Props) => {
             }
           })
           .catch((e) => {
-            setErrors(true)
-            setErrorMessage(e)
             console.error(e)
           })
-          .then(() => setCamera(id, video)) */
+          .then(() => setCamera(id, video))
       }
     },
     [setCamera, videoRef]
@@ -89,8 +84,6 @@ export const useVebCamConnection = ({ videoRef }: Props) => {
           }
         })
         .catch((e) => {
-          setErrors(true)
-          setErrorMessage(e)
           console.error(e)
         })
     } else {
