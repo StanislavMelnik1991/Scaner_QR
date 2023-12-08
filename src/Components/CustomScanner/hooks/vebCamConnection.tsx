@@ -27,7 +27,6 @@ export const useVebCamConnection = ({ videoRef }: Props) => {
         .getUserMedia({ video: { deviceId: { exact: id } } })
         .then((stream) => {
           video.srcObject = stream
-          video.play()
         })
         .catch((e) => {
           console.error(e)
@@ -91,7 +90,7 @@ export const useVebCamConnection = ({ videoRef }: Props) => {
     } else {
       setData('camera not found')
     }
-  }, [changeCamera, setData])
+  }, [changeCamera, setData, videoRef])
 
   return {
     onCameraChange: handleCameraChange,
