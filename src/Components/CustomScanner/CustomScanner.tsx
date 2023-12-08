@@ -39,6 +39,7 @@ export const CustomScanner = () => {
         ref={videoRef}
         className={styles.video}
         autoPlay
+        autoFocus
         onError={(error) => {
           const val = error.currentTarget.srcObject
           console.error(error)

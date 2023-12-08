@@ -22,9 +22,6 @@ export const useVebCamConnection = ({ videoRef }: Props) => {
   const [errors, setErrors] = useState(false)
   const [data, setData] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
-  const [controlsRef, setControlsRef] = useState<IScannerControls | undefined>(
-    undefined
-  )
 
   const onResult: OnResultFunction = useCallback(async (result, err) => {
     if (result) {
@@ -40,7 +37,20 @@ export const useVebCamConnection = ({ videoRef }: Props) => {
   const setCamera = useCallback(
     (id: string, video: HTMLVideoElement) => {
       if (id && video && isMediaDevicesSupported()) {
-        navigator.mediaDevices
+        const codeReader = new BrowserQRCodeReader(undefined, {
+          delayBetweenScanAttempts: DELAY,
+          delayBetweenScanSuccess: 5 * DELAY,
+        })
+        codeReader
+          .decodeFromConstraints(
+            { video: { deviceId: { exact: id } } },
+            video,
+            onResult
+          )
+          .catch((error: Error) => {
+            console.error(error)
+          })
+        /* navigator.mediaDevices
           .getUserMedia({ video: { deviceId: { exact: id } } })
           .then((stream) => {
             video.srcObject = stream
@@ -49,15 +59,14 @@ export const useVebCamConnection = ({ videoRef }: Props) => {
               delayBetweenScanSuccess: 5 * DELAY,
             })
             codeReader
-              .decodeFromStream(stream, video, onResult)
-              .then((controls: IScannerControls) => setControlsRef(controls))
+              .decodeFromConstraints({ video: { deviceId } }, video, onResult)
               .catch((error: Error) => {
                 console.error(error)
               })
           })
           .catch((e) => {
             console.error(e)
-          })
+          }) */
       }
     },
     [onResult]
@@ -112,12 +121,6 @@ export const useVebCamConnection = ({ videoRef }: Props) => {
     } else {
       setData('camera not found')
     }
-    return () => {
-      if (controlsRef) {
-        controlsRef.stop()
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [changeCamera, setData, videoRef])
 
   return {
