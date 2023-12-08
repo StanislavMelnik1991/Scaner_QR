@@ -30,12 +30,11 @@ export const useScanner = ({ delay, videoRef }: Props) => {
 
   useEffect(() => {
     if (videoRef.current) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const codeReader = new BrowserQRCodeReader(undefined, {
         delayBetweenScanAttempts: delay,
         delayBetweenScanSuccess: 5 * delay,
       })
-      /* codeReader.decodeFromVideoElement(videoRef.current, onResult) */
+      codeReader.decodeFromVideoElement(videoRef.current, onResult)
     }
   }, [delay, onResult, videoRef, data])
 
