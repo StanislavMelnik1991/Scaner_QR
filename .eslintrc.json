@@ -1,3 +1,60 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": [
+    // "next/core-web-vitals",
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
+    "plugin:react/jsx-runtime",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@next/next/recommended",
+    "plugin:prettier/recommended"
+  ],
+  "plugins": ["react", "@typescript-eslint", "prettier"],
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "settings": {
+    "next": {
+      // "rootDir": "packages/my-app/"
+    },
+    "settings": {
+      "react": {
+        "createClass": "createReactClass", 
+        "pragma": "React", "fragment": "Fragment", "version": "detect",  "flowVersion": "0.53" 
+      },
+      "propWrapperFunctions": [
+        "forbidExtraProps",
+        { "property": "freeze", "object": "Object" },
+        { "property": "myFavoriteWrapper" },
+        { "property": "forbidExtraProps", "exact": true }
+      ],
+      "componentWrapperFunctions": [
+        "observer", 
+        { "property": "styled" }, 
+        { "property": "observer", "object": "Mobx" },
+        { "property": "observer", "object": "<pragma>" }
+      ],
+      "formComponents": [
+        "CustomForm",
+        { "name": "Form", "formAttribute": "endpoint" }
+      ],
+      "linkComponents": [
+        "Hyperlink",
+        { "name": "Link", "linkAttribute": "to" }
+      ]
+    }
+  },
+
+  "rules": {
+    "prettier/prettier": "error",
+    "react/jsx-uses-react": "error",
+    "react/jsx-uses-vars": "error",
+    "react/react-in-jsx-scope": "off",
+    "react/jsx-filename-extension": [1, { "extensions": [".ts", ".tsx"] }],
+    "@typescript-eslint/no-unused-vars": "error",
+    "@typescript-eslint/no-explicit-any": "error",
+    "react/prop-types": "off"
+  }
 }

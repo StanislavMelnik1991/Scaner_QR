@@ -1,10 +1,10 @@
-import { BrowserQRCodeReader, IScannerControls } from '@zxing/browser';
-import { useCallback, useEffect, useState } from 'react';
-import type { RefObject } from 'react';
-import type { Result, Exception } from '@zxing/library';
+import { BrowserQRCodeReader, IScannerControls } from '@zxing/browser'
+import { useCallback, useEffect, useState } from 'react'
+import type { RefObject } from 'react'
+import type { Result, Exception } from '@zxing/library'
 
 type Props = {
-  delay: number,
+  delay: number
   videoRef: RefObject<HTMLVideoElement>
 }
 
@@ -12,13 +12,13 @@ type OnResultFunction = (
   result?: Result,
   error?: Exception,
   controls?: IScannerControls
-) => void;
+) => void
 
 export const useScanner = ({ delay, videoRef }: Props) => {
   const [data, setData] = useState<string | null>(null)
-  const [success, setSuccess] = useState(false);
+  const [success, setSuccess] = useState(false)
 
-  const onResult: OnResultFunction = useCallback(async (result, err, controls) => {
+  const onResult: OnResultFunction = useCallback(async (result, err) => {
     if (result) {
       const text = result.getText()
       setSuccess(true)

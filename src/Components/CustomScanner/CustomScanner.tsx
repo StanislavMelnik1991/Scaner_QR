@@ -1,25 +1,31 @@
-
-"use client"
-import { useRef, useState } from 'react';
+'use client'
+import { useRef } from 'react'
 import styles from './CustomScanner.module.scss'
-import classNames from 'classnames';
-import { useVebCamConnection } from './hooks/vebCamConnection';
+import classNames from 'classnames'
+import { useVebCamConnection } from './hooks/vebCamConnection'
 
 export const CustomScanner = () => {
   const videoRef = useRef<HTMLVideoElement>(null)
 
-  const [errors, setErrors] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
-  const { onCameraChange, cameras, deviceId, data, success } = useVebCamConnection({ videoRef })
+  const {
+    onCameraChange,
+    cameras,
+    deviceId,
+    data,
+    success,
+    errorMessage,
+    errors,
+    setErrorMessage,
+    setErrors,
+  } = useVebCamConnection({ videoRef })
 
   return (
-    <div className={classNames(
-      styles.wrapper,
-      {
+    <div
+      className={classNames(styles.wrapper, {
         [styles.success]: success,
         [styles.error]: errors,
-      }
-    )}>
+      })}
+    >
       {cameras && !!cameras.length && cameras.length > 1 && (
         <select name="select" onChange={onCameraChange} value={deviceId}>
           {cameras.map((camera) => (
