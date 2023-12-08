@@ -22,13 +22,14 @@
   }
 }
 
-.container {
-  width: fit-content;
-  height: fit-content;
-}
-
 .success {
   &::before {
     opacity: 1;
   }
+}
+
+.video {
+  width: 90vw;
+  max-width: 500px;
+  height: auto;
 }
