@@ -9,6 +9,7 @@ export const CustomScanner = () => {
   const videoRef = useRef<HTMLVideoElement>(null)
 
   const [errors, setErrors] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const { onCameraChange, cameras, deviceId, data, success } = useVebCamConnection({ videoRef })
 
   return (
@@ -31,16 +32,16 @@ export const CustomScanner = () => {
       <video
         ref={videoRef}
         className={styles.video}
-        onAbort={(e) => {
-          console.error(e)
+        onError={(error) => {
+          const val = error.currentTarget.srcObject
+          console.error(error)
           setErrors(true)
-        }}
-        onError={(e) => {
-          console.error(e)
-          setErrors(true)
+          setErrorMessage(`error${String(!!val)}`)
         }}
       />
       {!!data && <p>{data}</p>}
+      <br />
+      <p>{errorMessage}</p>
     </div>
   )
 }
