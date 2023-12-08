@@ -40,17 +40,22 @@ export const useVebCamConnection = ({ videoRef }: Props) => {
   }, [cameras, deviceId])
 
   useEffect(() => {
-    if (deviceId && isMediaDevicesSupported()) {
+    const video = videoRef.current;
+
+    if (deviceId && video && isMediaDevicesSupported()) {
+      navigator.mediaDevices.getUserMedia().then((stream) => {
+        const tracks = stream.getTracks()
+        if (tracks && tracks.length) {
+          tracks.forEach(track => track.stop())
+        }
+      }).catch((e) => console.error(e))
       navigator.mediaDevices.getUserMedia({ video: { deviceId: { exact: deviceId } } })
         .then((stream) => {
-          const video = videoRef.current;
-          if (!video) {
-            return
-          }
+
           video.srcObject = stream;
           video.play();
         })
-        .catch(err => {
+        .catch((err) => {
           console.log("An error occurred: " + err);
         });
     }
