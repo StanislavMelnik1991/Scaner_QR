@@ -34,19 +34,6 @@ export const useVebCamConnection = ({ videoRef }: Props) => {
   }, [])
   const [errorMessage, setErrorMessage] = useState('')
 
-  const connectScanner = useCallback(
-    (stream: MediaStream) => {
-      if (videoRef.current) {
-        const codeReader = new BrowserQRCodeReader(undefined, {
-          delayBetweenScanAttempts: DELAY,
-          delayBetweenScanSuccess: 5 * DELAY,
-        })
-        codeReader.decodeFromStream(stream, videoRef.current, onResult)
-      }
-    },
-    [onResult, videoRef]
-  )
-
   const setCamera = useCallback(
     (id: string, video: HTMLVideoElement) => {
       if (id && video && isMediaDevicesSupported()) {
@@ -54,14 +41,20 @@ export const useVebCamConnection = ({ videoRef }: Props) => {
           .getUserMedia({ video: { deviceId: { exact: id } } })
           .then((stream) => {
             video.srcObject = stream
-            connectScanner(stream)
+            if (videoRef.current) {
+              const codeReader = new BrowserQRCodeReader(undefined, {
+                delayBetweenScanAttempts: DELAY,
+                delayBetweenScanSuccess: 5 * DELAY,
+              })
+              codeReader.decodeFromStream(stream, videoRef.current, onResult)
+            }
           })
           .catch((e) => {
             console.error(e)
           })
       }
     },
-    [connectScanner]
+    [onResult, videoRef]
   )
 
   const changeCamera = useCallback(
