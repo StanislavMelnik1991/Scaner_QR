@@ -1,16 +1,18 @@
-import {
-  ChangeEventHandler,
-  RefObject,
-  useEffect,
-  useState,
-  useCallback,
-} from 'react'
+import { ChangeEventHandler, useEffect, useState, useCallback } from 'react'
 import { isMediaDevicesSupported } from './utils'
-import { useScanner } from './scanner'
+import { BrowserQRCodeReader, IScannerControls } from '@zxing/browser'
+import type { RefObject } from 'react'
+import type { Result, Exception } from '@zxing/library'
 
 type Props = {
   videoRef: RefObject<HTMLVideoElement>
 }
+
+type OnResultFunction = (
+  result?: Result,
+  error?: Exception,
+  controls?: IScannerControls
+) => void
 
 const DELAY = 500
 
@@ -18,22 +20,49 @@ export const useVebCamConnection = ({ videoRef }: Props) => {
   const [deviceId, setDeviceId] = useState<string | null>(null)
   const [cameras, setCameras] = useState<MediaDeviceInfo[]>([])
   const [errors, setErrors] = useState(false)
-  const [errorMessage, setErrorMessage] = useState('')
-  const { data, setData, success } = useScanner({ delay: DELAY, videoRef })
+  const [data, setData] = useState<string | null>(null)
+  const [success, setSuccess] = useState(false)
 
-  const setCamera = useCallback((id: string, video: HTMLVideoElement) => {
-    if (id && video && isMediaDevicesSupported()) {
-      navigator.mediaDevices
-        .getUserMedia({ video: { deviceId: { exact: id } } })
-        .then((stream) => {
-          video.srcObject = stream
-          video.play()
-        })
-        .catch((e) => {
-          console.error(e)
-        })
+  const onResult: OnResultFunction = useCallback(async (result, err) => {
+    if (result) {
+      const text = result.getText()
+      setSuccess(true)
+      setData(text)
+    } else if (err) {
+      setSuccess(false)
     }
   }, [])
+  const [errorMessage, setErrorMessage] = useState('')
+
+  const connectScanner = useCallback(
+    (stream: MediaStream) => {
+      if (videoRef.current) {
+        const codeReader = new BrowserQRCodeReader(undefined, {
+          delayBetweenScanAttempts: DELAY,
+          delayBetweenScanSuccess: 5 * DELAY,
+        })
+        codeReader.decodeFromStream(stream, videoRef.current, onResult)
+      }
+    },
+    [onResult, videoRef]
+  )
+
+  const setCamera = useCallback(
+    (id: string, video: HTMLVideoElement) => {
+      if (id && video && isMediaDevicesSupported()) {
+        navigator.mediaDevices
+          .getUserMedia({ video: { deviceId: { exact: id } } })
+          .then((stream) => {
+            video.srcObject = stream
+            connectScanner(stream)
+          })
+          .catch((e) => {
+            console.error(e)
+          })
+      }
+    },
+    [connectScanner]
+  )
 
   const changeCamera = useCallback(
     (id: string) => {
