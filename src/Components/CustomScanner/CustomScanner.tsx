@@ -16,7 +16,7 @@ export const CustomScanner = () => {
       styles.wrapper,
       {
         [styles.success]: success,
-        [styles.error]: success,
+        [styles.error]: errors,
       }
     )}>
       {cameras && !!cameras.length && cameras.length > 1 && (
