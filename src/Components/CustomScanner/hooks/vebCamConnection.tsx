@@ -69,24 +69,17 @@ export const useVebCamConnection = ({ videoRef }: Props) => {
       const video = videoRef.current
       if (id && video && isMediaDevicesSupported()) {
         setDeviceId(id)
-        navigator.mediaDevices
-          .getUserMedia({ video: true })
-          .then((stream) => {
-            const tracks = stream.getTracks()
-            if (tracks && tracks.length) {
-              tracks.forEach((track) => track.stop())
-            }
-          })
-          .catch((e) => {
-            console.error(e)
-          })
-          .then(() => setCamera(id, video))
+        setCamera(id, video)
       }
     },
     [setCamera, videoRef]
   )
 
   const handleCameraChange: ChangeEventHandler<HTMLSelectElement> = (event) => {
+    const video = videoRef.current
+    if (video) {
+      video.srcObject = null
+    }
     changeCamera(event.target.value)
   }
 
