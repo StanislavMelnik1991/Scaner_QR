@@ -42,7 +42,8 @@ export const useVebCamConnection = ({ videoRef }: Props) => {
       const video = videoRef.current
       if (id && video && isMediaDevicesSupported()) {
         setDeviceId(id)
-        navigator.mediaDevices
+        setCamera(id, video)
+        /* navigator.mediaDevices
           .getUserMedia({ video: true })
           .then((stream) => {
             const tracks = stream.getTracks()
@@ -55,7 +56,7 @@ export const useVebCamConnection = ({ videoRef }: Props) => {
             setErrorMessage(e)
             console.error(e)
           })
-          .then(() => setCamera(id, video))
+          .then(() => setCamera(id, video)) */
       }
     },
     [setCamera, videoRef]
