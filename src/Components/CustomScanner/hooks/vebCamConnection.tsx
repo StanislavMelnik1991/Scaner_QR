@@ -30,8 +30,6 @@ export const useVebCamConnection = ({ videoRef }: Props) => {
           video.play()
         })
         .catch((e) => {
-          setErrors(true)
-          setErrorMessage(e)
           console.error(e)
         })
     }
@@ -51,8 +49,6 @@ export const useVebCamConnection = ({ videoRef }: Props) => {
             }
           })
           .catch((e) => {
-            setErrors(true)
-            setErrorMessage(e)
             console.error(e)
           })
           .then(() => setCamera(id, video))
@@ -88,6 +84,8 @@ export const useVebCamConnection = ({ videoRef }: Props) => {
           }
         })
         .catch((e) => {
+          setErrors(true)
+          setErrorMessage(e)
           console.error(e)
         })
     } else {
