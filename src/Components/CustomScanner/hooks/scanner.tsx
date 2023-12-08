@@ -34,7 +34,7 @@ export const useScanner = ({ delay, videoRef }: Props) => {
         delayBetweenScanAttempts: delay,
         delayBetweenScanSuccess: 5 * delay,
       })
-      codeReader.decodeFromVideoElement(videoRef.current, onResult)
+      /* codeReader.decodeFromVideoElement(videoRef.current, onResult) */
     }
   }, [delay, onResult, videoRef, data])
 
